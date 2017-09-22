@@ -13,9 +13,9 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 @WebSocket
-public class WsServer {
+public class GameOfThreeServer {
 
-    private  Logger logger = LoggerFactory.getLogger(WsServer.class);
+    private  Logger logger = LoggerFactory.getLogger(GameOfThreeServer.class);
 
     @OnWebSocketMessage
     public void onText(Session session,String message) throws IOException{
