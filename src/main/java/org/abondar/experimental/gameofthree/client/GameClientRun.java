@@ -1,7 +1,6 @@
 package org.abondar.experimental.gameofthree.client;
 
 import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.PropertyConfigurator;
 import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 import org.slf4j.Logger;
@@ -9,8 +8,8 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 
-public class GameOfThreeClientRun {
-    private static Logger logger = LoggerFactory.getLogger(GameOfThreeClientRun.class);
+public class GameClientRun {
+    private static Logger logger = LoggerFactory.getLogger(GameClientRun.class);
 
     public static void main(String[] args) {
         String dest="ws://127.0.0.1:8080/gameThree";
@@ -18,7 +17,7 @@ public class GameOfThreeClientRun {
         WebSocketClient wsClient = new WebSocketClient();
 
         try{
-            GameOfThreeClient client = new GameOfThreeClient();
+            GameClient client = new GameClient();
             wsClient.start();
             URI echoURI = new URI(dest);
             ClientUpgradeRequest request = new ClientUpgradeRequest();

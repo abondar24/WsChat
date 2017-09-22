@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
 @WebSocket
-public class GameOfThreeClient {
-    private Logger logger = LoggerFactory.getLogger(GameOfThreeClient.class);
+public class GameClient {
+    private Logger logger = LoggerFactory.getLogger(GameClient.class);
     private Session session;
 
     private CountDownLatch latch = new CountDownLatch(1);

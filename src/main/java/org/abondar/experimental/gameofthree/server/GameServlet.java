@@ -7,12 +7,14 @@ import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 import javax.servlet.annotation.WebServlet;
 
 @WebServlet(urlPatterns = "/gameThree")
-public class GameOfThreeServlet extends WebSocketServlet {
+public class GameServlet extends WebSocketServlet {
 
 
     @Override
-    public void configure(WebSocketServletFactory webSocketServletFactory) {
+    public void configure(WebSocketServletFactory factory) {
         BasicConfigurator.configure();
-        webSocketServletFactory.register(GameOfThreeServer.class);
+
+        factory.register(GameSocket.class);
+
     }
 }
