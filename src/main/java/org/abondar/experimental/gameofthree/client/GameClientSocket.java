@@ -12,16 +12,16 @@ import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
 @WebSocket
-public class GameClient {
-    private Logger logger = LoggerFactory.getLogger(GameClient.class);
+public class GameClientSocket {
+    private Logger logger = LoggerFactory.getLogger(GameClientSocket.class);
     private Session session;
 
     private CountDownLatch latch = new CountDownLatch(1);
 
-
     @OnWebSocketMessage
     public void onText(Session session, String message) throws IOException{
         logger.info("Message from server: " + message);
+       GameSessionClient.getInstance().lastMessage=message;
     }
 
     @OnWebSocketConnect

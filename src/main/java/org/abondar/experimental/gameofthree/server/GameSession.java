@@ -9,14 +9,19 @@ public class GameSession {
     private static final GameSession instance = new GameSession();
 
 
+    public List<GameSocket> players = new ArrayList<>();
+
+    private List<String> names = new ArrayList<>();
+
+    public volatile int initialNumber = 0;
+
     public static GameSession getInstance() {
         return instance;
     }
 
-    private List<GameSocket> players = new ArrayList<>();
-
-    private List<String> names = new ArrayList<>();
-
+    public boolean isPlayersEmpty(){
+        return players.isEmpty();
+    }
 
     public void join(GameSocket socket) {
         players.add(socket);
@@ -39,8 +44,6 @@ public class GameSession {
     public void removeName(String name) {
         names.remove(name);
     }
-
-
 
 
     public void writeAllPlayers(String msg) {
