@@ -22,21 +22,24 @@ public class GameSocket {
 
     public Session session;
 
-    public String playerName;
+    public volatile String playerName;
 
     @OnWebSocketMessage
     public void onText(Session session, String message) throws IOException {
         logger.info("Message received: " + message);
 
+        if (message.equals("Connect")){
+            session.getRemote().sendString(ResponseUtil.CONNECTED);
+        }
         if (message.contains("Name:")) {
             playerName = message.substring(5, message.length());
             if (!GameSession.getInstance().checkName(playerName)) {
                 GameSession.getInstance().addName(playerName);
-                GameSession.getInstance().writeSpecificPlayer(playerName, "You are in game");
-                GameSession.getInstance().writeSpecificPlayer(playerName, "Current initial number is "
+                GameSession.getInstance().writeSpecificPlayer(playerName, ResponseUtil.IN_GAME);
+                GameSession.getInstance().writeSpecificPlayer(playerName, ResponseUtil.CURRENT_INITIAL_NUM
                         + GameSession.getInstance().initialNumber);
             } else {
-                session.getRemote().sendString("Player with such name already exists");
+                session.getRemote().sendString(ResponseUtil.PLAYER_EXISTS);
             }
 
         } else if (message.contains("{")) {
@@ -44,16 +47,16 @@ public class GameSocket {
             Move move = mapper.readValue(message, Move.class);
 
             if (!GameSession.getInstance().checkName(move.getPlayerFrom())) {
-                session.getRemote().sendString("You are not in game");
+                session.getRemote().sendString(ResponseUtil.SENDER_NOT_IN_GAME);
             }
 
             if (!GameSession.getInstance().checkName(move.getPlayerTo())) {
-                session.getRemote().sendString("This player is not in game");
+                session.getRemote().sendString(ResponseUtil.RECIEVER_NOT_IN_GAME);
             }
 
             if (move.getResultingNumber() == 1) {
                 GameSession.getInstance().initialNumber=0;
-                GameSession.getInstance().writeAllPlayers("Game Over");
+                GameSession.getInstance().writeAllPlayers(ResponseUtil.GAME_OVER);
             }
 
             String newMove = mapper.writeValueAsString(move);
@@ -62,11 +65,11 @@ public class GameSocket {
         } else if (message.matches("-?\\d+(\\.\\d+)?")) {
             if (GameSession.getInstance().initialNumber == 0) {
                 GameSession.getInstance().initialNumber=Integer.valueOf(message);
-                GameSession.getInstance().writeAllPlayers("Game has begun from number " +
+                GameSession.getInstance().writeAllPlayers(ResponseUtil.GAME_BEGUN +
                         message);
 
             } else {
-                GameSession.getInstance().writeAllPlayers("The number is already initialized");
+                GameSession.getInstance().writeAllPlayers(ResponseUtil.NUMBER_INITIALIZED);
             }
         }
 
