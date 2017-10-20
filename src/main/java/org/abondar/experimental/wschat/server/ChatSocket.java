@@ -31,9 +31,10 @@ public class ChatSocket {
             String username = message.split(":")[1];
             if (!ChatRoom.getInstance().checkUsername(username)) {
                 ChatRoom.getInstance().addUsername(username, this);
-
+                session.getRemote().sendString("{}");
             } else {
                 session.getRemote().sendString(ResponseUtil.USER_EXISTS);
+
             }
 
         } else if (message.contains("{")) {
@@ -41,7 +42,7 @@ public class ChatSocket {
             Message msg = mapper.readValue(message, Message.class);
 
             if (!ChatRoom.getInstance().checkUsername(msg.getSender()) ||
-                    !ChatRoom.getInstance().checkUsername(msg.getRecepient())) {
+                    !ChatRoom.getInstance().checkUsername(msg.getRecepient()) && !"all".equals(msg.getRecepient())) {
                 session.getRemote().sendString(ResponseUtil.UNKNOWN_USER);
             } else {
                 if (msg.getRecepient().equals("all")) {
@@ -63,9 +64,11 @@ public class ChatSocket {
     @OnWebSocketConnect
     public void onConnect(Session session) throws IOException {
         logger.info(session.getRemoteAddress().getHostString() + " connected");
+        this.session = session;
         ChatRoom.getInstance().join(this);
         session.getRemote().sendString(ResponseUtil.CONNECTED);
         session.getRemote().sendString(ResponseUtil.ENTER_USERNAME);
+        session.getRemote().sendString("Users: " + ChatRoom.getInstance().clientUser.keySet());
 
     }
 

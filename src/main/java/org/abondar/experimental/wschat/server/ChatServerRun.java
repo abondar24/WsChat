@@ -17,7 +17,7 @@ public class ChatServerRun {
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         server.setHandler(context);
 
-        ServletHolder holder = new ServletHolder("ws-char", ChatServlet.class);
+        ServletHolder holder = new ServletHolder("ws-chat", ChatServlet.class);
         context.addServlet(holder, "/");
 
         try {

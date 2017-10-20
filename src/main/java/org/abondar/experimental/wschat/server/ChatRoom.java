@@ -19,7 +19,7 @@ public class ChatRoom {
     public List<ChatSocket> clients = new ArrayList<>();
 
 
-    private ObjectMapper mapper;
+    private ObjectMapper mapper = new ObjectMapper();
 
     public static ChatRoom getInstance() {
         return instance;
