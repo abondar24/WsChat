@@ -67,8 +67,13 @@ public class ChatSocket {
         this.session = session;
         ChatRoom.getInstance().join(this);
         session.getRemote().sendString(ResponseUtil.CONNECTED);
-        session.getRemote().sendString(ResponseUtil.ENTER_USERNAME);
-        session.getRemote().sendString("Users: " + ChatRoom.getInstance().clientUser.keySet());
+
+        if (!ChatRoom.getInstance().clientUser.isEmpty()){
+            session.getRemote().sendString("Users: " + ChatRoom.getInstance().clientUser.keySet());
+        } else {
+            session.getRemote().sendString(ResponseUtil.ENTER_USERNAME);
+        }
+
 
     }
 
