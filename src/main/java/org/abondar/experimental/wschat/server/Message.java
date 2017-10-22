@@ -3,15 +3,15 @@ package org.abondar.experimental.wschat.server;
 public class Message {
 
     private String sender;
-    private String recepient;
+    private String recipient;
     private String message;
 
 
     public Message(){}
 
-    public Message(String sender, String recepient, String message) {
+    public Message(String sender, String recipient, String message) {
         this.sender = sender;
-        this.recepient = recepient;
+        this.recipient = recipient;
         this.message = message;
     }
 
@@ -23,12 +23,12 @@ public class Message {
         this.sender = sender;
     }
 
-    public String getRecepient() {
-        return recepient;
+    public String getRecipient() {
+        return recipient;
     }
 
-    public void setRecepient(String recepient) {
-        this.recepient = recepient;
+    public void setRecipient(String recipient) {
+        this.recipient = recipient;
     }
 
     public String getMessage() {

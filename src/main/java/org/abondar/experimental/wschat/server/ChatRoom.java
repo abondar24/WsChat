@@ -61,7 +61,7 @@ public class ChatRoom {
     }
 
     public void writeSpecificUser(Message msg) throws JsonProcessingException {
-        ChatSocket client = findClientByUsername(msg.getRecepient());
+        ChatSocket client = findClientByUsername(msg.getRecipient());
         String message = mapper.writeValueAsString(msg);
         client.session.getRemote().sendStringByFuture(message);
     }

@@ -42,10 +42,10 @@ public class ChatSocket {
             Message msg = mapper.readValue(message, Message.class);
 
             if (!ChatRoom.getInstance().checkUsername(msg.getSender()) ||
-                    !ChatRoom.getInstance().checkUsername(msg.getRecepient()) && !"all".equals(msg.getRecepient())) {
+                    !ChatRoom.getInstance().checkUsername(msg.getRecipient()) && !"all".equals(msg.getRecipient())) {
                 session.getRemote().sendString(ResponseUtil.UNKNOWN_USER);
             } else {
-                if (msg.getRecepient().equals("all")) {
+                if (msg.getRecipient().equals("all")) {
                     ChatRoom.getInstance().writeAllUsers(msg);
                 } else {
                     ChatRoom.getInstance().writeSpecificUser(msg);
