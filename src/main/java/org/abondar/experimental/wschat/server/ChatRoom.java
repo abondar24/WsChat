@@ -14,9 +14,9 @@ public class ChatRoom {
     private static final ChatRoom instance = new ChatRoom();
 
 
-    public Map<String, ChatSocket> clientUser = new HashMap<>();
+    public Map<String, ServerSocket> clientUser = new HashMap<>();
 
-    public List<ChatSocket> clients = new ArrayList<>();
+    public List<ServerSocket> clients = new ArrayList<>();
 
 
     private ObjectMapper mapper = new ObjectMapper();
@@ -29,16 +29,16 @@ public class ChatRoom {
         return clients.isEmpty();
     }
 
-    public void join(ChatSocket socket) {
+    public void join(ServerSocket socket) {
         clients.add(socket);
     }
 
 
-    public void remove(ChatSocket socket) {
+    public void remove(ServerSocket socket) {
         clients.remove(socket);
     }
 
-    public void addUsername(String name, ChatSocket client) {
+    public void addUsername(String name, ServerSocket client) {
         clientUser.put(name, client);
     }
 
@@ -53,7 +53,7 @@ public class ChatRoom {
 
 
     public void writeAllUsers(Message msg) throws JsonProcessingException {
-        for (ChatSocket client : clients) {
+        for (ServerSocket client : clients) {
 
             String message = mapper.writeValueAsString(msg);
             client.session.getRemote().sendStringByFuture(message);
@@ -61,13 +61,13 @@ public class ChatRoom {
     }
 
     public void writeSpecificUser(Message msg) throws JsonProcessingException {
-        ChatSocket client = findClientByUsername(msg.getRecipient());
+        ServerSocket client = findClientByUsername(msg.getRecipient());
         String message = mapper.writeValueAsString(msg);
         client.session.getRemote().sendStringByFuture(message);
     }
 
-    public ChatSocket findClientByUsername(String username) {
-        ChatSocket res = new ChatSocket();
+    public ServerSocket findClientByUsername(String username) {
+        ServerSocket res = new ServerSocket();
 
         if (clientUser.containsKey(username)) {
             res = clientUser.get(username);

@@ -15,9 +15,9 @@ import java.io.IOException;
 
 
 @WebSocket
-public class ChatSocket {
+public class ServerSocket {
 
-    private Logger logger = LoggerFactory.getLogger(ChatSocket.class);
+    private Logger logger = LoggerFactory.getLogger(ServerSocket.class);
 
     public Session session;
 
@@ -31,7 +31,7 @@ public class ChatSocket {
             String username = message.split(":")[1];
             if (!ChatRoom.getInstance().checkUsername(username)) {
                 ChatRoom.getInstance().addUsername(username, this);
-                session.getRemote().sendString("{}");
+                session.getRemote().sendString(ResponseUtil.ENTER_MESSAGE);
             } else {
                 session.getRemote().sendString(ResponseUtil.USER_EXISTS);
 

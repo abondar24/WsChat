@@ -11,7 +11,7 @@ public class ChatServlet extends WebSocketServlet {
     public void configure(WebSocketServletFactory factory) {
         BasicConfigurator.configure();
 
-        factory.register(ChatSocket.class);
+        factory.register(ServerSocket.class);
 
     }
 }
