@@ -2,12 +2,12 @@ package org.abondar.experimental.wschat.client;
 
 import java.util.Scanner;
 
-public class ChatSessionClient {
+public class ChatClient {
 
-    private static final ChatSessionClient instance = new ChatSessionClient();
+    private static final ChatClient instance = new ChatClient();
     public volatile Scanner in = new Scanner(System.in);
 
-    public static ChatSessionClient getInstance() {
+    public static ChatClient getInstance() {
         return instance;
 
     }

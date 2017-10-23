@@ -22,6 +22,7 @@ public class ChatClientSocket {
     private CountDownLatch latch = new CountDownLatch(1);
     private ObjectMapper mapper = new ObjectMapper();
 
+
     private String username = "";
 
     @OnWebSocketMessage
@@ -31,15 +32,13 @@ public class ChatClientSocket {
         switch (message) {
             case ResponseUtil.ENTER_USERNAME:
                 System.out.println(message);
-                username = ChatSessionClient.getInstance().in.next();
-                session.getRemote().sendString("Username:" + username);
+                enterUsername();
                 break;
 
             case ResponseUtil.USER_EXISTS:
                 username = "";
                 System.out.println(message);
-                username = ChatSessionClient.getInstance().in.next();
-                session.getRemote().sendString("Username:" + username);
+                enterUsername();
                 break;
 
             case ResponseUtil.UNKNOWN_USER:
@@ -50,16 +49,21 @@ public class ChatClientSocket {
                 System.out.println(message);
                 break;
 
-
         }
 
         if (message.contains("Users: ")) {
             System.out.println(message);
+            System.out.println(ResponseUtil.ENTER_USERNAME);
+            enterUsername();
+
         } else if (message.contains("{")) {
             Message msg = mapper.readValue(message, Message.class);
-            System.out.println("Message from: " + msg.getSender());
-            System.out.println(msg.getMessage());
+            if (msg.getMessage() != null) {
+                System.out.println("Message from: " + msg.getSender());
+                System.out.println(msg.getMessage());
+            }
             sendMessage();
+
         }
 
 
@@ -75,9 +79,19 @@ public class ChatClientSocket {
 
     private void sendMessage() throws IOException {
         System.out.println("Enter recipient(enter all if you send to everyone)");
-        String recipient = ChatSessionClient.getInstance().in.next();
+        String recipient = ChatClient.getInstance().in.next();
+        if (recipient.equals("cs")) {
+            closeSession();
+            return;
+        }
+
         System.out.println("Enter message");
-        String message = ChatSessionClient.getInstance().in.next();
+        String message = ChatClient.getInstance().in.next();
+        if (message.equals("cs")) {
+            closeSession();
+            return;
+        }
+
 
         Message mesg = new Message(username, recipient, message);
 
@@ -85,6 +99,23 @@ public class ChatClientSocket {
         session.getRemote().sendString(msg);
 
 
+    }
+
+    private void enterUsername() throws IOException {
+        username = "";
+
+        username = ChatClient.getInstance().in.next();
+        if (username.equals("cs")) {
+            closeSession();
+            return;
+        }
+
+        session.getRemote().sendString("Username:" + username);
+    }
+
+    private void closeSession() {
+        System.out.println("You are disconnected");
+        session.close();
     }
 
     public CountDownLatch getLatch() {
