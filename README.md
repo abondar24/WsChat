@@ -1,4 +1,4 @@
-#WsChat
+# WsChat
 
 Small console based websocket chat-room application.
 
